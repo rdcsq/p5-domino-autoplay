@@ -9,6 +9,7 @@ export function drawDeck(
   x: number,
   y: number,
   rotation: number,
+  currentTurn: boolean,
 ) {
   s.push();
 
@@ -19,6 +20,11 @@ export function drawDeck(
     s.rotate(rotation);
   }
 
+  if (currentTurn) {
+    s.fill(140, 3, 252);
+  } else {
+    s.fill(0, 0, 0);
+  }
   s.textSize(30);
   s.text(title, 225, 25, s.width, s.height);
 

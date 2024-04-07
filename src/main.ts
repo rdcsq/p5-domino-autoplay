@@ -22,9 +22,17 @@ s.setup = () => {
 s.draw = () => {
   s.background(255, 255, 255);
   s.fill(0, 0, 0);
-  s.text(`${s.width}x${s.height}`, 0, 10, 100);
+  s.text(gameState.getCurrentTurn(), 0, 10, 100);
 
   gameState.getPlayers().forEach(({ name, pieces }, i) => {
-    drawDeck(s, name, pieces, positions[i][0], positions[i][1], 90 * i);
+    drawDeck(
+      s,
+      name,
+      pieces,
+      positions[i][0],
+      positions[i][1],
+      90 * i,
+      gameState.getCurrentTurn() == i,
+    );
   });
 };

@@ -41,6 +41,7 @@ export class GameState {
             ...piece,
             ownedByPlayerId: i,
           };
+          this.currentTurn = i;
           pieces.push();
         } else {
           pieces.push(piece);
@@ -60,5 +61,10 @@ export class GameState {
 
   getCurrentTurn = () => this.currentTurn;
 
-  nextTurn = () => {};
+  nextTurn = () => {
+    this.currentTurn += 1;
+    if (this.currentTurn == 4) {
+      this.currentTurn = 0;
+    }
+  };
 }
