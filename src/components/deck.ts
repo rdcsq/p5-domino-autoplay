@@ -1,15 +1,14 @@
 import p5 from "p5";
 import { Piece } from "../types/piece";
-import { RotationDegrees } from "../types/rotation";
 import { drawPiece } from "./piece";
 
 export function drawDeck(
   s: p5,
   title: string,
-  pieces: Piece[],
+  pieces: (Piece | undefined)[],
   x: number,
   y: number,
-  rotation: RotationDegrees,
+  rotation: number,
 ) {
   s.push();
 
