@@ -1,13 +1,24 @@
 import p5 from "p5";
 import { drawPiece } from "./components/piece";
+import { drawDeck } from "./components/deck";
+import { Piece } from "./types/piece";
 
 // @ts-ignore
 window.p5 = p5;
 // @ts-ignore
 const s: p5 = window;
 
+let pieces: Piece[] = [];
+
 s.setup = () => {
   s.createCanvas(1920, 1080);
+
+  for (let i = 0; i < 7; i++) {
+    pieces.push({
+      pointsFirstHalf: Math.floor(Math.random() * 7),
+      pointsSecondHalf: Math.floor(Math.random() * 7),
+    });
+  }
 };
 
 s.draw = () => {
@@ -15,26 +26,8 @@ s.draw = () => {
   s.fill(0, 0, 0);
   s.text(`${s.width}x${s.height}`, 0, 10, 100);
 
-  drawPiece(s, 0, 0, 50, 50, 50, "horizontal");
-
-  for (let i = 1; i <= 6; i++) {
-    for (let j = 1; j <= 6; j++) {
-      drawPiece(
-        s,
-        { pointsFirstHalf: i, pointsSecondHalf: j },
-        40 + 100 * i + 10 * i,
-        40 + 50 * j + 10 * j,
-        50,
-        "horizontal",
-      );
-      drawPiece(
-        s,
-        { pointsFirstHalf: i, pointsSecondHalf: j },
-        960 + 50 * i + 10 * i,
-        40 + 100 * j + 10 * j,
-        50,
-        "vertical",
-      );
-    }
-  }
+  drawDeck(s, "Jugador 1", pieces, 700, 800, 0);
+  drawDeck(s, "Jugador 2", pieces, 300, 225, 90);
+  drawDeck(s, "Jugador 3", pieces, 1280, 250, 180);
+  drawDeck(s, "Jugador 4", pieces, 1600, 800, 270);
 };
