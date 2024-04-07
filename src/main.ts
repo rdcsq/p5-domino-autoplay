@@ -15,6 +15,8 @@ s.draw = () => {
   s.fill(0, 0, 0);
   s.text(`${s.width}x${s.height}`, 0, 10, 100);
 
+  drawPiece(s, 0, 0, 50, 50, 50, "horizontal");
+
   for (let i = 1; i <= 6; i++) {
     for (let j = 1; j <= 6; j++) {
       drawPiece(

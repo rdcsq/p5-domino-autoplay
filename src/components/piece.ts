@@ -50,23 +50,25 @@ export function drawPiece(
 
   s.fill(0, 0, 0);
 
-  drawDotGrid(
-    s,
-    firstHalf,
-    x,
-    y,
-    pieceRotation == "horizontal" ? width / 2 : width,
-    pieceRotation,
-  );
+  if (firstHalf > 0)
+    drawDotGrid(
+      s,
+      firstHalf,
+      x,
+      y,
+      pieceRotation == "horizontal" ? width / 2 : width,
+      pieceRotation,
+    );
 
-  drawDotGrid(
-    s,
-    secondHalf,
-    pieceRotation == "horizontal" ? x + width / 2 : x,
-    pieceRotation == "horizontal" ? y : y + height / 2,
-    pieceRotation == "horizontal" ? width / 2 : width,
-    pieceRotation,
-  );
+  if (secondHalf > 0)
+    drawDotGrid(
+      s,
+      secondHalf,
+      pieceRotation == "horizontal" ? x + width / 2 : x,
+      pieceRotation == "horizontal" ? y : y + height / 2,
+      pieceRotation == "horizontal" ? width / 2 : width,
+      pieceRotation,
+    );
 
   s.pop();
 }
