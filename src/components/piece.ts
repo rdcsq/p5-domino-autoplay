@@ -8,14 +8,20 @@ export function drawPiece(
   secondHalf: number,
   x: number,
   y: number,
-  width: number,
-  height: number,
+  size: number,
+  pieceRotation: PieceRotation,
 ) {
   if (firstHalf < 0 || firstHalf > 6 || secondHalf < 0 || secondHalf > 6)
     throw Error("number of dots is out of range");
 
-  const pieceRotation: PieceRotation =
-    width > height ? "horizontal" : "vertical";
+  let width = size,
+    height = size;
+
+  if (pieceRotation == "horizontal") {
+    width *= 2;
+  } else {
+    height *= 2;
+  }
 
   s.push();
   s.fill(255, 255, 255);

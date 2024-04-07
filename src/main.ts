@@ -17,8 +17,24 @@ s.draw = () => {
 
   for (let i = 1; i <= 6; i++) {
     for (let j = 1; j <= 6; j++) {
-      drawPiece(s, i, j, 40 + 100 * i + 10 * i, 40 + 50 * j + 10 * j, 100, 50);
-      drawPiece(s, i, j, 960 + 50 * i + 10 * i, 40 + 100 * j + 10 * j, 50, 100);
+      drawPiece(
+        s,
+        i,
+        j,
+        40 + 100 * i + 10 * i,
+        40 + 50 * j + 10 * j,
+        50,
+        "horizontal",
+      );
+      drawPiece(
+        s,
+        i,
+        j,
+        960 + 50 * i + 10 * i,
+        40 + 100 * j + 10 * j,
+        50,
+        "vertical",
+      );
     }
   }
 };
