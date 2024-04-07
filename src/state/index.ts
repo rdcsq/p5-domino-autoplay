@@ -8,6 +8,8 @@ export class GameState {
     pieces: (Piece | undefined)[];
   }[];
   private initialPiece!: PieceInBoard;
+  private leftMostPiece!: PieceInBoard;
+  private rightMostPiece!: PieceInBoard;
 
   constructor() {
     this.currentTurn = 0;
@@ -22,7 +24,6 @@ export class GameState {
 
         do {
           piece = generatePiece();
-          console.log(piece);
         } while (
           generatedPieces.find(
             (x) => `${piece.pointsFirstHalf}${piece.pointsSecondHalf}` == x,
@@ -41,6 +42,8 @@ export class GameState {
             ...piece,
             ownedByPlayerId: i,
           };
+          this.leftMostPiece = this.initialPiece;
+          this.rightMostPiece = this.initialPiece;
           this.currentTurn = i;
           pieces.push();
         } else {
@@ -53,8 +56,6 @@ export class GameState {
         pieces,
       });
     }
-
-    console.log(this.players);
   }
 
   getPlayers = () => this.players;
@@ -66,5 +67,80 @@ export class GameState {
     if (this.currentTurn == 4) {
       this.currentTurn = 0;
     }
+
+    // 50% to check left or right
+    if (Math.random() > 0.5) {
+      if (this.checkLeftPiece()) {
+        return;
+      }
+      if (this.checkRightPiece()) {
+        return;
+      }
+    } else {
+      if (this.checkRightPiece()) {
+        return;
+      }
+      if (this.checkLeftPiece()) {
+        return;
+      }
+    }
+
+    // TODO: pasa turno porque no tiene piezas
   };
+
+  private checkLeftPiece(): Boolean {
+    const pieceLeftIndex = this.players[this.currentTurn].pieces.findIndex(
+      (x) =>
+        x != undefined &&
+        (this.leftMostPiece.pointsFirstHalf == x.pointsFirstHalf ||
+          this.leftMostPiece.pointsFirstHalf == x.pointsSecondHalf),
+    );
+
+    if (pieceLeftIndex != -1) {
+      const piece = this.players[this.currentTurn].pieces[pieceLeftIndex]!;
+
+      if (piece.pointsSecondHalf != this.leftMostPiece.pointsFirstHalf) {
+        const points = [piece.pointsFirstHalf, piece.pointsSecondHalf];
+        piece.pointsFirstHalf = points[1];
+        piece.pointsSecondHalf = points[0];
+      }
+
+      this.leftMostPiece.pieceOnFirstHalf = {
+        ...piece,
+        ownedByPlayerId: this.currentTurn,
+      };
+      this.leftMostPiece = this.leftMostPiece.pieceOnFirstHalf;
+      this.players[this.currentTurn].pieces[pieceLeftIndex] = undefined;
+      return true;
+    }
+    return false;
+  }
+
+  private checkRightPiece(): Boolean {
+    const pieceRightIndex = this.players[this.currentTurn].pieces.findIndex(
+      (x) =>
+        x != undefined &&
+        (this.rightMostPiece.pointsSecondHalf == x.pointsFirstHalf ||
+          this.rightMostPiece.pointsSecondHalf == x.pointsSecondHalf),
+    );
+    if (pieceRightIndex != -1) {
+      const piece = this.players[this.currentTurn].pieces[pieceRightIndex]!;
+
+      if (piece.pointsFirstHalf != this.rightMostPiece.pointsSecondHalf) {
+        const points = [piece.pointsFirstHalf, piece.pointsSecondHalf];
+        piece.pointsFirstHalf = points[1];
+        piece.pointsSecondHalf = points[0];
+      }
+      this.rightMostPiece.pieceOnSecondHalf = {
+        ...piece,
+        ownedByPlayerId: this.currentTurn,
+      };
+      this.rightMostPiece = this.rightMostPiece.pieceOnSecondHalf;
+      this.players[this.currentTurn].pieces[pieceRightIndex] = undefined;
+      return true;
+    }
+    return false;
+  }
+
+  getInitialPiece = (): PieceInBoard => this.initialPiece;
 }

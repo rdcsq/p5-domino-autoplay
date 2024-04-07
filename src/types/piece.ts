@@ -4,7 +4,7 @@ export type Piece = {
 };
 
 export type PieceInBoard = Piece & {
-  pieceOnFisrtHalf?: PieceInBoard;
+  pieceOnFirstHalf?: PieceInBoard;
   pieceOnSecondHalf?: PieceInBoard;
   ownedByPlayerId: number;
 };

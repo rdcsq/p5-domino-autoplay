@@ -1,6 +1,6 @@
 import p5 from "p5";
 import { Rotation } from "../types/rotation";
-import { Piece } from "../types/piece";
+import { Piece, PieceInBoard } from "../types/piece";
 
 export function drawPiece(
   s: p5,
@@ -52,9 +52,8 @@ export function drawPiece(
 
   s.line(lineXStart, lineYStart, lineXEnd, lineYEnd);
 
-  s.fill(0, 0, 0);
-
-  if (piece.pointsFirstHalf > 0)
+  if (piece.pointsFirstHalf > 0) {
+    s.fill(255, 0, 0);
     drawDotGrid(
       s,
       piece.pointsFirstHalf,
@@ -63,8 +62,10 @@ export function drawPiece(
       pieceRotation == "horizontal" ? width / 2 : width,
       pieceRotation,
     );
+  }
 
-  if (piece.pointsSecondHalf > 0)
+  if (piece.pointsSecondHalf > 0) {
+    s.fill(0, 0, 0);
     drawDotGrid(
       s,
       piece.pointsSecondHalf,
@@ -73,6 +74,7 @@ export function drawPiece(
       pieceRotation == "horizontal" ? width / 2 : width,
       pieceRotation,
     );
+  }
 
   s.pop();
 }
@@ -129,4 +131,8 @@ function drawDotGrid(
       }
     }
   }
+}
+
+export function isPieceADouble(piece: Piece) {
+  return piece.pointsFirstHalf == piece.pointsSecondHalf;
 }

@@ -1,6 +1,7 @@
 import p5 from "p5";
 import { drawDeck } from "./components/deck";
 import { GameState } from "./state";
+import { drawBoard } from "./state/board";
 
 // @ts-ignore
 window.p5 = p5;
@@ -15,8 +16,31 @@ let positions = [
   [1600, 800],
 ];
 
+let nextTurnButton: p5.Element;
+
 s.setup = () => {
   s.createCanvas(1920, 1080);
+  nextTurnButton = s.createButton("Siguiente turno");
+  nextTurnButton.mousePressed(gameState.nextTurn);
+  nextTurnButton.position(100, 100);
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
+  gameState.nextTurn();
 };
 
 s.draw = () => {
@@ -35,4 +59,9 @@ s.draw = () => {
       gameState.getCurrentTurn() == i,
     );
   });
+
+  drawBoard(s, gameState.getInitialPiece());
+
+  s.line(s.width / 2, 0, s.width / 2, s.height);
+  s.line(0, s.height / 2, s.width, s.height / 2);
 };
