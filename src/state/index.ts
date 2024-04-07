@@ -1,4 +1,5 @@
 import { Piece, PieceInBoard } from "../types/piece";
+import { generatePiece } from "./generate-piece";
 
 export class GameState {
   private currentTurn: number;
@@ -6,30 +7,44 @@ export class GameState {
     name: string;
     pieces: (Piece | undefined)[];
   }[];
-  //   private initialPiece!: PieceInBoard;
+  private initialPiece!: PieceInBoard;
 
   constructor() {
     this.currentTurn = 0;
     this.players = [];
 
+    let generatedPieces: string[] = [];
+
     for (let i = 0; i < 4; i++) {
       let pieces: Piece[] = [];
       for (let j = 0; j < 7; j++) {
-        let piece = {
-          pointsFirstHalf: Math.floor(Math.random() * 7),
-          pointsSecondHalf: Math.floor(Math.random() * 7),
-        };
+        let piece: Piece;
 
-        // if (piece.pointsFirstHalf == 6 && piece.pointsSecondHalf == 6) {
-        //   this.initialPiece = {
-        //     ...piece,
-        //     ownedByPlayerId: i,
-        //   };
-        //   pieces.push();
-        //   return;
-        // }
+        do {
+          piece = generatePiece();
+          console.log(piece);
+        } while (
+          generatedPieces.find(
+            (x) => `${piece.pointsFirstHalf}${piece.pointsSecondHalf}` == x,
+          ) != undefined
+        );
 
-        pieces.push(piece);
+        generatedPieces.push(
+          `${piece.pointsFirstHalf}${piece.pointsSecondHalf}`,
+        );
+        generatedPieces.push(
+          `${piece.pointsSecondHalf}${piece.pointsFirstHalf}`,
+        );
+
+        if (piece.pointsFirstHalf == 6 && piece.pointsSecondHalf == 6) {
+          this.initialPiece = {
+            ...piece,
+            ownedByPlayerId: i,
+          };
+          pieces.push();
+        } else {
+          pieces.push(piece);
+        }
       }
 
       this.players.push({
@@ -37,6 +52,8 @@ export class GameState {
         pieces,
       });
     }
+
+    console.log(this.players);
   }
 
   getPlayers = () => this.players;
