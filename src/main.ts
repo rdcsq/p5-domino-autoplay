@@ -21,8 +21,7 @@ s.draw = () => {
     for (let j = 1; j <= 6; j++) {
       drawPiece(
         s,
-        i,
-        j,
+        { pointsFirstHalf: i, pointsSecondHalf: j },
         40 + 100 * i + 10 * i,
         40 + 50 * j + 10 * j,
         50,
@@ -30,8 +29,7 @@ s.draw = () => {
       );
       drawPiece(
         s,
-        i,
-        j,
+        { pointsFirstHalf: i, pointsSecondHalf: j },
         960 + 50 * i + 10 * i,
         40 + 100 * j + 10 * j,
         50,

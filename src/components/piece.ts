@@ -1,17 +1,21 @@
 import p5 from "p5";
-
-type PieceRotation = "horizontal" | "vertical";
+import { Rotation } from "../types/rotation";
+import { Piece } from "../types/piece";
 
 export function drawPiece(
   s: p5,
-  firstHalf: number,
-  secondHalf: number,
+  piece: Piece,
   x: number,
   y: number,
   size: number,
-  pieceRotation: PieceRotation,
+  pieceRotation: Rotation,
 ) {
-  if (firstHalf < 0 || firstHalf > 6 || secondHalf < 0 || secondHalf > 6)
+  if (
+    piece.pointsFirstHalf < 0 ||
+    piece.pointsFirstHalf > 6 ||
+    piece.pointsSecondHalf < 0 ||
+    piece.pointsSecondHalf > 6
+  )
     throw Error("number of dots is out of range");
 
   let width = size,
@@ -50,20 +54,20 @@ export function drawPiece(
 
   s.fill(0, 0, 0);
 
-  if (firstHalf > 0)
+  if (piece.pointsFirstHalf > 0)
     drawDotGrid(
       s,
-      firstHalf,
+      piece.pointsFirstHalf,
       x,
       y,
       pieceRotation == "horizontal" ? width / 2 : width,
       pieceRotation,
     );
 
-  if (secondHalf > 0)
+  if (piece.pointsSecondHalf > 0)
     drawDotGrid(
       s,
-      secondHalf,
+      piece.pointsSecondHalf,
       pieceRotation == "horizontal" ? x + width / 2 : x,
       pieceRotation == "horizontal" ? y : y + height / 2,
       pieceRotation == "horizontal" ? width / 2 : width,
@@ -79,7 +83,7 @@ function drawDotGrid(
   x: number,
   y: number,
   size: number, // size of square in which its contained
-  pieceRotation: PieceRotation,
+  pieceRotation: Rotation,
 ) {
   const spacing = size / 10;
   const d = size * 0.2;
