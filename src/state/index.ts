@@ -8,10 +8,12 @@ export class GameState {
   private initialPiece!: PieceInBoard;
   private leftMostPiece!: PieceInBoard;
   private rightMostPiece!: PieceInBoard;
+  private skipCount: number;
 
   constructor() {
     this.currentTurn = 0;
     this.players = [];
+    this.skipCount = 0;
 
     let generatedPieces: string[] = [];
 
@@ -62,6 +64,15 @@ export class GameState {
 
   getCurrentTurn = () => this.currentTurn;
 
+  getInitialPiece = (): PieceInBoard => this.initialPiece;
+
+  checkWinner = () => {
+    if (this.players[this.currentTurn].pieces.length == 0) {
+      this.players[this.currentTurn].isWinner = true;
+      return;
+    }
+  };
+
   nextTurn = () => {
     if (this.players.find((player) => player.isWinner) != undefined) return;
 
@@ -77,22 +88,18 @@ export class GameState {
 
     // 50% to check left or right
     if (Math.random() > 0.5) {
-      if (this.checkLeftPiece()) {
-        return;
-      }
-      if (this.checkRightPiece()) {
+      if (this.checkLeftPiece() || this.checkRightPiece()) {
+        this.skipCount = 0;
         return;
       }
     } else {
-      if (this.checkRightPiece()) {
-        return;
-      }
-      if (this.checkLeftPiece()) {
+      if (this.checkRightPiece() || this.checkLeftPiece()) {
+        this.skipCount = 0;
         return;
       }
     }
 
-    // TODO: pasa turno porque no tiene piezas
+    this.skipCount += 1;
     this.players[this.currentTurn].hasSkipped = true;
   };
 
@@ -149,6 +156,4 @@ export class GameState {
     }
     return false;
   }
-
-  getInitialPiece = (): PieceInBoard => this.initialPiece;
 }
