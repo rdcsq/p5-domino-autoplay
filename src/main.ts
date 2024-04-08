@@ -17,8 +17,6 @@ let positions = [
   [1600, 825],
 ];
 
-let nextTurnButton: p5.Element;
-
 s.setup = () => {
   s.createCanvas(1920, 1080);
   const numberOfGames = Number.parseInt(
@@ -45,13 +43,23 @@ s.draw = () => {
     );
   });
 
-  if (gameState.getWinner() != undefined) {
-    s.push();
-    s.textSize(30);
-    s.textAlign("center");
-    s.text(`Ganó ${gameState.getWinner()!.name}`, s.width / 2, 40);
-    s.pop();
-  }
+  s.push();
+  s.textSize(30);
+  s.textAlign("center");
+  s.text(`Juego ${simulation.getCurrentGameId() + 1}`, s.width / 2, 40);
+  s.pop();
+
+  let leaderboard = simulation
+    .getTimesPlayerWon()
+    .reduce(
+      (leaderboard, playerTimesWon, index) =>
+        `${leaderboard}Jugador ${index + 1}: ${playerTimesWon}\n`,
+      "",
+    );
+  s.push();
+  s.textSize(25);
+  s.text(leaderboard, 50, 50, s.width, s.height);
+  s.pop();
 
   drawBoard(s, gameState.getInitialPiece());
 };
