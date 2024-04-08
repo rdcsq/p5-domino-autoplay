@@ -1,12 +1,10 @@
 import { Piece, PieceInBoard } from "../types/piece";
+import { Player } from "../types/player";
 import { generatePiece } from "./generate-piece";
 
 export class GameState {
   private currentTurn: number;
-  private players: {
-    name: string;
-    pieces: (Piece | undefined)[];
-  }[];
+  private players: Player[];
   private initialPiece!: PieceInBoard;
   private leftMostPiece!: PieceInBoard;
   private rightMostPiece!: PieceInBoard;
@@ -54,6 +52,8 @@ export class GameState {
       this.players.push({
         name: `Jugador ${i + 1}`,
         pieces,
+        hasSkipped: false,
+        isWinner: false,
       });
     }
   }
@@ -63,6 +63,8 @@ export class GameState {
   getCurrentTurn = () => this.currentTurn;
 
   nextTurn = () => {
+    if (this.players.find((player) => player.isWinner) != undefined) return;
+
     this.currentTurn += 1;
     if (this.currentTurn == 4) {
       this.currentTurn = 0;
@@ -109,7 +111,7 @@ export class GameState {
         ...piece,
         ownedByPlayerId: this.currentTurn,
       };
-      this.leftMostPiece = this.leftMostPiece.pieceOnFirstHalf;
+      this.leftMostPiece = this.leftMostPiece.pieceOnFirstHalf!;
       this.players[this.currentTurn].pieces[pieceLeftIndex] = undefined;
       return true;
     }
@@ -135,7 +137,7 @@ export class GameState {
         ...piece,
         ownedByPlayerId: this.currentTurn,
       };
-      this.rightMostPiece = this.rightMostPiece.pieceOnSecondHalf;
+      this.rightMostPiece = this.rightMostPiece.pieceOnSecondHalf!;
       this.players[this.currentTurn].pieces[pieceRightIndex] = undefined;
       return true;
     }
