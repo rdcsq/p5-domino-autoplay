@@ -1,6 +1,5 @@
 import p5 from "p5";
 import { drawDeck } from "./components/deck";
-import { GameState } from "./state";
 import { drawBoard } from "./state/board";
 import { Simulation } from "./simulation";
 
@@ -49,16 +48,20 @@ s.draw = () => {
   s.text(`Juego ${simulation.getCurrentGameId() + 1}`, s.width / 2, 40);
   s.pop();
 
-  let leaderboard = simulation
-    .getTimesPlayerWon()
-    .reduce(
-      (leaderboard, playerTimesWon, index) =>
-        `${leaderboard}Jugador ${index + 1}: ${playerTimesWon}\n`,
-      "",
-    );
   s.push();
   s.textSize(25);
-  s.text(leaderboard, 50, 50, s.width, s.height);
+  let y = 50;
+  gameState.getPlayers().forEach((player, index) => {
+    s.fill(player.color.r, player.color.g, player.color.b);
+    s.text(
+      `${player.name}: ${simulation.getTimesPlayerWon()[index]}`,
+      50,
+      y,
+      s.width,
+      s.height,
+    );
+    y += 25;
+  });
   s.pop();
 
   drawBoard(s, gameState.getInitialPiece());

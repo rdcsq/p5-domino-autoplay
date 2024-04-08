@@ -7,4 +7,9 @@ export type Player = {
   hasSkipped: boolean;
   isWinner: boolean;
   points: number;
+  color: {
+    r: number;
+    g: number;
+    b: number;
+  };
 };

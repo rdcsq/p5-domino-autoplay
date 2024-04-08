@@ -2,6 +2,13 @@ import { Piece, PieceInBoard } from "../types/piece";
 import { Player } from "../types/player";
 import { generatePiece } from "./generate-piece";
 
+const colors: { r: number; g: number; b: number }[] = [
+  { r: 66, g: 135, b: 245 },
+  { r: 166, g: 40, b: 113 },
+  { r: 121, g: 207, b: 45 },
+  { r: 207, g: 115, b: 45 },
+];
+
 export class GameState {
   private currentTurn: number;
   private players: Player[];
@@ -65,6 +72,7 @@ export class GameState {
         hasSkipped: false,
         isWinner: false,
         points,
+        color: colors[i],
       });
     }
   }
