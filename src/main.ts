@@ -10,10 +10,10 @@ const s: p5 = window;
 
 let gameState = new GameState();
 let positions = [
-  [700, 800],
-  [300, 225],
-  [1280, 250],
-  [1600, 800],
+  [675, 850],
+  [225, 250],
+  [1250, 250],
+  [1600, 825],
 ];
 
 let nextTurnButton: p5.Element;
@@ -23,24 +23,9 @@ s.setup = () => {
   nextTurnButton = s.createButton("Siguiente turno");
   nextTurnButton.mousePressed(gameState.nextTurn);
   nextTurnButton.position(100, 100);
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
-  gameState.nextTurn();
+  for (let i = 0; i < 20; i++) {
+    gameState.nextTurn();
+  }
 };
 
 s.draw = () => {
