@@ -31,7 +31,7 @@ export function drawPiece(
   s.fill(255, 255, 255);
   s.stroke(0, 0, 0);
 
-  s.rect(x, y, width, height);
+  s.rect(x, y, width, height, 6, 6, 6, 6);
 
   let lineXStart: number;
   let lineXEnd: number;
