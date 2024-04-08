@@ -18,10 +18,10 @@ let positions = [
 
 s.setup = () => {
   s.createCanvas(1920, 1080);
-  // const numberOfGames = Number.parseInt(
-  //   prompt("Cantidad de juegos a jugar:") ?? "1",
-  // );
-  simulation = new Simulation(5);
+  const numberOfGames = Number.parseInt(
+    prompt("Cantidad de juegos a jugar:") ?? "1",
+  );
+  simulation = new Simulation(numberOfGames);
   simulation.start();
 };
 
