@@ -28,7 +28,7 @@ export class Simulation {
     while (game.getWinner() == undefined) {
       console.log(`Game ${this.currentGame} turn`);
       game.nextTurn();
-      await new Promise((r) => setTimeout(r, 100));
+      await new Promise((r) => setTimeout(r, 16));
     }
 
     this.timesPlayerWon[game.getWinner()!.id] += 1;

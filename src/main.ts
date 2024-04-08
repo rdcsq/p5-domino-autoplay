@@ -18,10 +18,10 @@ let positions = [
 
 s.setup = () => {
   s.createCanvas(1920, 1080);
-  const numberOfGames = Number.parseInt(
-    prompt("Cantidad de juegos a jugar:") ?? "1",
-  );
-  simulation = new Simulation(numberOfGames);
+  // const numberOfGames = Number.parseInt(
+  //   prompt("Cantidad de juegos a jugar:") ?? "1",
+  // );
+  simulation = new Simulation(5);
   simulation.start();
 };
 
@@ -48,21 +48,51 @@ s.draw = () => {
   s.text(`Juego ${simulation.getCurrentGameId() + 1}`, s.width / 2, 40);
   s.pop();
 
-  s.push();
-  s.textSize(25);
-  let y = 50;
-  gameState.getPlayers().forEach((player, index) => {
-    s.fill(player.color.r, player.color.g, player.color.b);
-    s.text(
-      `${player.name}: ${simulation.getTimesPlayerWon()[index]}`,
-      50,
-      y,
-      s.width,
-      s.height,
-    );
-    y += 25;
-  });
-  s.pop();
+  if (simulation.getCurrentGameId() > 0) {
+    s.push();
+    s.textSize(25);
+    s.angleMode("degrees");
+
+    let y = 25;
+    let arcStart = 0;
+    gameState.getPlayers().forEach((player, index) => {
+      s.fill(player.color.r, player.color.g, player.color.b);
+
+      let playerTimesWon = simulation.getTimesPlayerWon()[index];
+      let arcEnd = s.map(
+        playerTimesWon,
+        0,
+        simulation.getCurrentGameId() + 1,
+        0,
+        360,
+      );
+      s.arc(350, 100, 100, 100, arcStart, arcStart + arcEnd, "pie");
+      arcStart += arcEnd;
+
+      let percentage = s.map(
+        playerTimesWon,
+        0,
+        simulation.getCurrentGameId() + 1,
+        0,
+        100,
+      );
+
+      y += 25;
+      s.text(
+        `${player.name}: ${playerTimesWon} (${Math.round(percentage)}%)`,
+        50,
+        y,
+        s.width,
+        s.height,
+      );
+    });
+
+    s.pop();
+  }
+
+  if (simulation.getHasFinished()) {
+    s.noLoop();
+  }
 
   drawBoard(s, gameState.getInitialPiece());
 };
