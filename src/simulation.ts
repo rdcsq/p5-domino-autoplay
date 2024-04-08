@@ -6,7 +6,7 @@ export class Simulation {
   private currentGame: number;
   private hasFinished: boolean;
 
-  constructor(private numberOfGames: number) {
+  constructor(numberOfGames: number) {
     this.gameStates = [];
     this.timesPlayerWon = [0, 0, 0, 0];
     this.currentGame = 0;
