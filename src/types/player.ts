@@ -5,4 +5,5 @@ export type Player = {
   pieces: (Piece | undefined)[];
   hasSkipped: boolean;
   isWinner: boolean;
+  points: number;
 };

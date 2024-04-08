@@ -23,9 +23,6 @@ s.setup = () => {
   nextTurnButton = s.createButton("Siguiente turno");
   nextTurnButton.mousePressed(gameState.nextTurn);
   nextTurnButton.position(100, 100);
-  for (let i = 0; i < 20; i++) {
-    gameState.nextTurn();
-  }
 };
 
 s.draw = () => {
@@ -41,11 +38,17 @@ s.draw = () => {
       positions[i][1],
       90 * i,
       gameState.getCurrentTurn() == i,
+      true,
     );
   });
 
-  drawBoard(s, gameState.getInitialPiece());
+  if (gameState.getWinner() != undefined) {
+    s.push();
+    s.textSize(30);
+    s.textAlign("center");
+    s.text(`Ganó ${gameState.getWinner()!.name}`, s.width / 2, 40);
+    s.pop();
+  }
 
-  s.line(s.width / 2, 0, s.width / 2, s.height);
-  s.line(0, s.height / 2, s.width, s.height / 2);
+  drawBoard(s, gameState.getInitialPiece());
 };

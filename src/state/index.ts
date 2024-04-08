@@ -9,6 +9,7 @@ export class GameState {
   private leftMostPiece!: PieceInBoard;
   private rightMostPiece!: PieceInBoard;
   private skipCount: number;
+  private winner?: Player;
 
   constructor() {
     this.currentTurn = 0;
@@ -51,11 +52,17 @@ export class GameState {
         }
       }
 
+      let points = pieces.reduce(
+        (x, piece) => x + piece.pointsFirstHalf + piece.pointsSecondHalf,
+        0,
+      );
+
       this.players.push({
         name: `Jugador ${i + 1}`,
         pieces,
         hasSkipped: false,
         isWinner: false,
+        points,
       });
     }
   }
@@ -66,15 +73,22 @@ export class GameState {
 
   getInitialPiece = (): PieceInBoard => this.initialPiece;
 
+  getWinner = (): Player | undefined => this.winner;
+
   checkWinner = () => {
-    if (this.players[this.currentTurn].pieces.length == 0) {
+    if (
+      this.players[this.currentTurn].pieces.find((x) => x != undefined) ==
+      undefined
+    ) {
       this.players[this.currentTurn].isWinner = true;
+      this.winner = this.players[this.currentTurn];
+      this.players.forEach((x) => (x.hasSkipped = false));
       return;
     }
   };
 
   nextTurn = () => {
-    if (this.players.find((player) => player.isWinner) != undefined) return;
+    if (this.winner) return;
 
     const p = this.players.find((player) => player.hasSkipped);
     if (p != undefined) {
@@ -90,13 +104,24 @@ export class GameState {
     if (Math.random() > 0.5) {
       if (this.checkLeftPiece() || this.checkRightPiece()) {
         this.skipCount = 0;
+        this.checkWinner();
         return;
       }
     } else {
       if (this.checkRightPiece() || this.checkLeftPiece()) {
         this.skipCount = 0;
+        this.checkWinner();
         return;
       }
+    }
+
+    if (this.skipCount == 3) {
+      this.winner = this.players.reduce(
+        (chosenWinner, player) =>
+          player.points < chosenWinner.points ? player : chosenWinner,
+        this.players[0],
+      );
+      this.players.forEach((x) => (x.hasSkipped = false));
     }
 
     this.skipCount += 1;
@@ -126,6 +151,8 @@ export class GameState {
       };
       this.leftMostPiece = this.leftMostPiece.pieceOnFirstHalf!;
       this.players[this.currentTurn].pieces[pieceLeftIndex] = undefined;
+      this.players[this.currentTurn].points -=
+        piece.pointsFirstHalf + piece.pointsSecondHalf;
       return true;
     }
     return false;
@@ -152,6 +179,8 @@ export class GameState {
       };
       this.rightMostPiece = this.rightMostPiece.pieceOnSecondHalf!;
       this.players[this.currentTurn].pieces[pieceRightIndex] = undefined;
+      this.players[this.currentTurn].points -=
+        piece.pointsFirstHalf + piece.pointsSecondHalf;
       return true;
     }
     return false;

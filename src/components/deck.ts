@@ -9,6 +9,7 @@ export function drawDeck(
   y: number,
   rotation: number,
   currentTurn: boolean,
+  showPoints: boolean,
 ) {
   s.push();
 
@@ -35,6 +36,11 @@ export function drawDeck(
   if (player.isWinner) {
     s.fill(0, 255, 0);
     s.text("Ganó", 400, 25, s.width, s.height);
+  }
+
+  if (showPoints) {
+    s.fill(0, 0, 255);
+    s.text(player.points, 100, 25, s.width, s.height);
   }
 
   player.pieces.forEach((piece, index) => {
