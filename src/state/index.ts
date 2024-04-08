@@ -52,10 +52,11 @@ export class GameState {
         }
       }
 
-      let points = pieces.reduce(
-        (x, piece) => x + piece.pointsFirstHalf + piece.pointsSecondHalf,
-        0,
-      );
+      let points = pieces.reduce((x, piece) => {
+        if (piece.pointsFirstHalf == 0 && piece.pointsSecondHalf == 0)
+          return x + 50;
+        return x + piece.pointsFirstHalf + piece.pointsSecondHalf;
+      }, 0);
 
       this.players.push({
         name: `Jugador ${i + 1}`,
@@ -75,7 +76,7 @@ export class GameState {
 
   getWinner = (): Player | undefined => this.winner;
 
-  checkWinner = () => {
+  private checkWinner = () => {
     if (
       this.players[this.currentTurn].pieces.find((x) => x != undefined) ==
       undefined
@@ -151,8 +152,12 @@ export class GameState {
       };
       this.leftMostPiece = this.leftMostPiece.pieceOnFirstHalf!;
       this.players[this.currentTurn].pieces[pieceLeftIndex] = undefined;
-      this.players[this.currentTurn].points -=
-        piece.pointsFirstHalf + piece.pointsSecondHalf;
+      if (piece.pointsFirstHalf == 0 && piece.pointsSecondHalf == 0) {
+        this.players[this.currentTurn].points -= 50;
+      } else {
+        this.players[this.currentTurn].points -=
+          piece.pointsFirstHalf + piece.pointsSecondHalf;
+      }
       return true;
     }
     return false;
@@ -179,8 +184,12 @@ export class GameState {
       };
       this.rightMostPiece = this.rightMostPiece.pieceOnSecondHalf!;
       this.players[this.currentTurn].pieces[pieceRightIndex] = undefined;
-      this.players[this.currentTurn].points -=
-        piece.pointsFirstHalf + piece.pointsSecondHalf;
+      if (piece.pointsFirstHalf == 0 && piece.pointsSecondHalf == 0) {
+        this.players[this.currentTurn].points -= 50;
+      } else {
+        this.players[this.currentTurn].points -=
+          piece.pointsFirstHalf + piece.pointsSecondHalf;
+      }
       return true;
     }
     return false;
