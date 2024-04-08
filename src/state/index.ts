@@ -59,6 +59,7 @@ export class GameState {
       }, 0);
 
       this.players.push({
+        id: i,
         name: `Jugador ${i + 1}`,
         pieces,
         hasSkipped: false,

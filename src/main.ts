@@ -2,13 +2,14 @@ import p5 from "p5";
 import { drawDeck } from "./components/deck";
 import { GameState } from "./state";
 import { drawBoard } from "./state/board";
+import { Simulation } from "./simulation";
 
 // @ts-ignore
 window.p5 = p5;
 // @ts-ignore
 const s: p5 = window;
 
-let gameState = new GameState();
+let simulation: Simulation;
 let positions = [
   [675, 850],
   [225, 250],
@@ -20,15 +21,17 @@ let nextTurnButton: p5.Element;
 
 s.setup = () => {
   s.createCanvas(1920, 1080);
-  nextTurnButton = s.createButton("Siguiente turno");
-  nextTurnButton.mousePressed(gameState.nextTurn);
-  nextTurnButton.position(100, 100);
+  const numberOfGames = Number.parseInt(
+    prompt("Cantidad de juegos a jugar:") ?? "1",
+  );
+  simulation = new Simulation(numberOfGames);
+  simulation.start();
 };
 
 s.draw = () => {
+  const gameState = simulation.getCurrentGame();
   s.background(255, 255, 255);
   s.fill(0, 0, 0);
-  s.text(gameState.getCurrentTurn(), 0, 10, 100);
 
   gameState.getPlayers().forEach((player, i) => {
     drawDeck(
