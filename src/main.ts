@@ -33,11 +33,10 @@ s.draw = () => {
   s.fill(0, 0, 0);
   s.text(gameState.getCurrentTurn(), 0, 10, 100);
 
-  gameState.getPlayers().forEach(({ name, pieces }, i) => {
+  gameState.getPlayers().forEach((player, i) => {
     drawDeck(
       s,
-      name,
-      pieces,
+      player,
       positions[i][0],
       positions[i][1],
       90 * i,

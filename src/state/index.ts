@@ -65,6 +65,11 @@ export class GameState {
   nextTurn = () => {
     if (this.players.find((player) => player.isWinner) != undefined) return;
 
+    const p = this.players.find((player) => player.hasSkipped);
+    if (p != undefined) {
+      p.hasSkipped = false;
+    }
+
     this.currentTurn += 1;
     if (this.currentTurn == 4) {
       this.currentTurn = 0;
@@ -88,6 +93,7 @@ export class GameState {
     }
 
     // TODO: pasa turno porque no tiene piezas
+    this.players[this.currentTurn].hasSkipped = true;
   };
 
   private checkLeftPiece(): Boolean {

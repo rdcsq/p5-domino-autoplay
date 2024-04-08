@@ -1,11 +1,10 @@
 import p5 from "p5";
-import { Piece } from "../types/piece";
 import { drawPiece } from "./piece";
+import { Player } from "../types/player";
 
 export function drawDeck(
   s: p5,
-  title: string,
-  pieces: (Piece | undefined)[],
+  player: Player,
   x: number,
   y: number,
   rotation: number,
@@ -26,9 +25,14 @@ export function drawDeck(
     s.fill(0, 0, 0);
   }
   s.textSize(30);
-  s.text(title, 225, 25, s.width, s.height);
+  s.text(player.name, 225, 25, s.width, s.height);
 
-  pieces.forEach((piece, index) => {
+  if (player.hasSkipped) {
+    s.fill(255, 0, 0);
+    s.text("Paso", 400, 25, s.width, s.height);
+  }
+
+  player.pieces.forEach((piece, index) => {
     if (piece != undefined) {
       drawPiece(s, piece, 20 + index * 80, 80, 50, "vertical");
     }
