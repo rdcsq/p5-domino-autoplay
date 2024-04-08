@@ -20,7 +20,6 @@ export function drawBoard(s: p5, initialPiece: PieceInBoard) {
     "vertical",
   );
 
-  let isFirstPiece = true;
   let piece = initialPiece.pieceOnFirstHalf;
   let x = s.width / 2 - size / 2 - size * 2;
   let y = s.height / 2 - size / 2;
@@ -88,21 +87,72 @@ export function drawBoard(s: p5, initialPiece: PieceInBoard) {
     piece = piece.pieceOnFirstHalf;
   }
 
-  isFirstPiece = true;
   piece = initialPiece.pieceOnSecondHalf;
   x = s.width / 2 + size / 2;
   y = s.height / 2 - size / 2;
+  remainingX = 6;
+  remainingY = 2;
+  wasLastPieceADouble = true;
+  firstInLastTurn = true;
 
   while (piece != undefined) {
-    if (isPieceADouble(piece)) {
-      y -= size / 2;
+    if (remainingX > 0) {
+      if (isPieceADouble(piece)) {
+        y -= size / 2;
+        drawPiece(s, piece, x, y, size, "vertical");
+        y += size / 2;
+        wasLastPieceADouble = true;
+        x += size;
+      } else {
+        drawPiece(s, piece, x, y, size, "horizontal");
+        wasLastPieceADouble = false;
+        x += size * 2;
+      }
+      remainingX--;
+    } else if (remainingY > 0) {
+      if (remainingY == 2) {
+        x -= size;
+        y += wasLastPieceADouble ? size * 1.5 : size;
+      } else {
+        y += size * 2;
+      }
       drawPiece(s, piece, x, y, size, "vertical");
-      y += size / 2;
-      x += size;
+      remainingY--;
     } else {
-      drawPiece(s, piece, x, y, size, "horizontal");
-      x += size * 2;
+      if (isPieceADouble(piece)) {
+        if (firstInLastTurn) {
+          x -= size / 2;
+          y += size * 2;
+          drawPiece(s, piece, x, y, size, "horizontal");
+          x -= size * 2;
+        } else {
+          y -= size / 2;
+          x += size;
+          drawPiece(s, piece, x, y, size, "vertical");
+          x -= size * 2;
+          y += size / 2;
+        }
+      } else {
+        if (firstInLastTurn) {
+          x -= size * 2;
+          y += size;
+        }
+        let points = [piece.pointsFirstHalf, piece.pointsSecondHalf];
+        // flipping the points because otherwise, they'd be swapped
+        drawPiece(
+          s,
+          { pointsFirstHalf: points[1], pointsSecondHalf: points[0] },
+          x,
+          y,
+          size,
+          "horizontal",
+        );
+        x -= size * 2;
+      }
+
+      firstInLastTurn = false;
     }
+
     piece = piece.pieceOnSecondHalf;
   }
 

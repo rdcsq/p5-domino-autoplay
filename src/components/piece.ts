@@ -1,6 +1,6 @@
 import p5 from "p5";
 import { Rotation } from "../types/rotation";
-import { Piece, PieceInBoard } from "../types/piece";
+import { Piece } from "../types/piece";
 
 export function drawPiece(
   s: p5,
