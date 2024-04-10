@@ -86,7 +86,17 @@ s.draw = () => {
         s.height,
       );
     });
+    s.pop();
 
+    s.push();
+    s.textSize(30);
+    s.textAlign("right");
+    s.text(
+      `Empates: ${simulation.getTies()}/${simulation.getCurrentGameId()} (${((simulation.getTies() / simulation.getCurrentGameId()) * 100).toFixed(2)}%)`,
+      0,
+      50,
+      s.width - 50,
+    );
     s.pop();
   }
 

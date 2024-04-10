@@ -16,7 +16,7 @@ export class GameState {
   private leftMostPiece!: PieceInBoard;
   private rightMostPiece!: PieceInBoard;
   private skipCount: number;
-  private winner?: Player;
+  private winners?: Player[];
 
   constructor() {
     this.currentTurn = 0;
@@ -83,22 +83,31 @@ export class GameState {
 
   getInitialPiece = (): PieceInBoard => this.initialPiece;
 
-  getWinner = (): Player | undefined => this.winner;
+  getWinners = (): Player[] | undefined => this.winners;
 
   private checkWinner = () => {
     if (
       this.players[this.currentTurn].pieces.find((x) => x != undefined) ==
       undefined
     ) {
-      this.players[this.currentTurn].isWinner = true;
-      this.winner = this.players[this.currentTurn];
-      this.players.forEach((x) => (x.hasSkipped = false));
+      let winners: Player[] = [];
+      this.players.forEach((x) => {
+        if (x.points == 0) {
+          winners.push(x);
+          x.isWinner = true;
+        }
+        x.hasSkipped = false;
+      });
+
+      if (winners.length > 0) {
+        this.winners = winners;
+      }
       return;
     }
   };
 
   nextTurn = () => {
-    if (this.winner) return;
+    if (this.winners != undefined) return;
 
     const p = this.players.find((player) => player.hasSkipped);
     if (p != undefined) {
@@ -126,10 +135,17 @@ export class GameState {
     }
 
     if (this.skipCount == 3) {
-      this.winner = this.players.reduce(
-        (chosenWinner, player) =>
-          player.points < chosenWinner.points ? player : chosenWinner,
-        this.players[0],
+      // TODO
+      this.winners = this.players.reduce(
+        (winners, player) => {
+          if (winners[0].points == player.points) {
+            return [...winners, player];
+          } else if (player.points < winners[0].points) {
+            return [player];
+          }
+          return winners;
+        },
+        [this.players[0]],
       );
       this.players.forEach((x) => (x.hasSkipped = false));
     }
